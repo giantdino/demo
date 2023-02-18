@@ -11,8 +11,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+import javax.sql.DataSource;
 import java.util.List;
 
 @Configuration
@@ -50,7 +52,8 @@ public class ProjectConfig {
 
 
     @Bean
-    public UserDetailsService userDetailsService() {
+    public UserDetailsService userDetailsService(DataSource dataSource) {
+        return new JdbcUserDetailsManager(dataSource);
         //InMemoryUserDetailsManager userDetailsService = new InMemoryUserDetailsManager();
 
         /*User user = (User) User.withUsername("jimmy")
@@ -62,9 +65,9 @@ public class ProjectConfig {
 
         return userDetailsService;*/
 
-        UserDetails u= new User("jimmy", "12345", "read");
+        /*UserDetails u= new User("jimmy", "12345", "read");
         List<UserDetails> users = List.of(u);
-        return new InMemoryUserDetailsService(users);
+        return new InMemoryUserDetailsService(users);*/
     }
 
     @Bean
