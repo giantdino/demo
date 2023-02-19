@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,16 +21,30 @@ import java.util.List;
 @Configuration
 public class ProjectConfig {
 
-    /*
+    @Autowired
+    private CustomAuthenticationSuccessHandler authenticationSuccessHandler;
+
+    @Autowired
+    private CustomAuthenticationFailureHandler authenticationFailureHandler;
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception
     {
+
+//        http.httpBasic(c -> {
+//            c.realmName("OTHER");
+//            c.authenticationEntryPoint(new CustomEntryPoint());
+//                });
         http.authorizeHttpRequests((authz) -> authz.anyRequest().authenticated())
+                .formLogin()
+                //.successHandler(authenticationSuccessHandler)
+                //.failureHandler(authenticationFailureHandler)
+                .and()
                 .httpBasic();
 
         return http.build();
     }
 
+/*
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http)
             throws Exception {
@@ -42,7 +57,7 @@ public class ProjectConfig {
                 .build();
 
         userDetailsService.createUser(user);
-        
+
         return http.getSharedObject(AuthenticationManagerBuilder.class)
                 .userDetailsService(userDetailsService)
                 .passwordEncoder(NoOpPasswordEncoder.getInstance())
@@ -50,10 +65,20 @@ public class ProjectConfig {
                 .build();
     }*/
 
+//    @Autowired
+//    private CustomAuthenticationProvider authProvider;
 
-    @Bean
-    public UserDetailsService userDetailsService(DataSource dataSource) {
-        return new JdbcUserDetailsManager(dataSource);
+//    @Bean
+//    public AuthenticationManager authManager(HttpSecurity http) throws Exception {
+//        AuthenticationManagerBuilder authenticationManagerBuilder =
+//                http.getSharedObject(AuthenticationManagerBuilder.class);
+//        authenticationManagerBuilder.authenticationProvider(authProvider);
+//        return authenticationManagerBuilder.build();
+//    }
+
+    //@Bean
+    //public UserDetailsService userDetailsService(DataSource dataSource) {
+    //    return new JdbcUserDetailsManager(dataSource);
         //InMemoryUserDetailsManager userDetailsService = new InMemoryUserDetailsManager();
 
         /*User user = (User) User.withUsername("jimmy")
@@ -68,10 +93,10 @@ public class ProjectConfig {
         /*UserDetails u= new User("jimmy", "12345", "read");
         List<UserDetails> users = List.of(u);
         return new InMemoryUserDetailsService(users);*/
-    }
+    //}
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
-    }
+//    @Bean
+//    public PasswordEncoder passwordEncoder() {
+//        return NoOpPasswordEncoder.getInstance();
+//    }
 }
